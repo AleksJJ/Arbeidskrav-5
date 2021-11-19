@@ -9,9 +9,15 @@ editor_options:
 
 #### Introduksjon
 
+#### Metode
+
+#### Resultater
+
 ```{r}
 library(exscidata)
 library(ggplot2)
+library(lmerTest); library(lme4)
+library(emmeans)
 data("dxadata"); data("strengthvolume")
 
 library(tidyverse)
@@ -29,87 +35,82 @@ dat <- dxadata %>%
   mutate(LBM_change = post - pre)%>%
   group_by(sets)
   
+  
+
+dat%>%
+  group_by(sets) %>%
+ summarise(m = mean(LBM_change),
+            sd = sd(LBM_change)) %>%
+  mutate(ms = paste0(signif(m, 3), "(", signif(sd, 3), ")")) %>%
+  select(sets, ms) %>%
+  print()
+
+
 
 dat2 <- dat %>%
   pivot_wider(names_from = sets,
-              values_from = LBM_change) %>%
+              values_from = LBM_change)
  
-
-
-  
-  
- 
-  
-#slå sammen pre og post til time igjen, og splitte sets til multiple og single???
   
 
 m1 <- lm(LBM_change ~ sets + pre, data = dat) 
 
 m2 <- aov(LBM_change ~ pre + sets, data = dat)
 
-#splitte sets til 2 variabler. Multiple og single viser LBM change
-
-
-summary(m2)
-
-
-
-
-```
-
-```{r}
-library(lmerTest); library(lme4)
-
-  
 m3 <- lm(post ~ pre + sex + sets, data = dat) 
 m4 <- lmerTest::lmer(LBM_change ~ pre + sex + sets +(1|participant), data = dat)
 
-
 m5 <- lme4::lmer(post ~ pre + sex + sets +(1|participant), data = dat)
 
-plot(m5)
 
 summary(m3)
 
- 
-  
+plot(m5)
+
+  #ser ut som at m5 er best
   
   #lmer4 var tingen for å finne p verdi. confidence interval er good for hypotesetesting 
 
 ```
 
-kladd!!!
 
 
-  #prøver å lage et plot her..
-  ggplot(aes(pre, LBM_change)) + geom_point(size = 3, fill = "lightblue", shape = 21) +
-         labs(x = "baseline", 
-              y = expression("LBM_change)) + 
-              theme minimal()
-              
-              
-              
-               ggplot(dat2, aes(x=post,y=pre)) + 
-  geom_point(size=2) + 
-  xlab("1 sett") + 
-  ylab("3 sett") +
-  theme_bw()
-  
-  
-  
-  ggplot(aes(pre, LBM_change)) + geom_point(size = 3, fill = "lightblue", shape = 21) +
-         labs(x = "baseline", 
-              y = expression("LBM_change")) + 
-              print()
-              
-              
-              
-lm(pre ~ single + multiple, data = dat2) %>%
-  
-  
-plot(LBM_change ~ single, data=dat2, ylab="baseline", xlab="1 sett")
-print()
 
-plot(LBM_change ~ multiple, data=dat2, ylab="baseline", xlab="1 sett")
-print()
+
+
+```{r}
+
+str.dat <- strengthvolume %>%
+  group_by(exercise) %>%
+  mutate(scaled.load = load / max(load, na.rm = TRUE)) %>%
+  group_by(participant, time, sex, sets) %>%
+  summarise(combined.load = mean(scaled.load, na.rm = TRUE)) %>%
+  ungroup()
+
+  
+str.dat2 <- str.dat %>%
+filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %>%
+  mutate(time = factor(time, levels = c("pre", "post")),
+         group = factor(sets, levels = c("single", "multiple"))) %>% 
+ group_by(participant) %>%
+  mutate(n = n()) %>%
+  filter(n == "4") %>% #bare de med målinger ved alle tester er tatt med.
+  pivot_wider(names_from = time,
+              values_from = combined.load) %>%
+  
+  
+   mutate(pr.change = (post - pre)/pre * 100)  %>%
+  group_by(sets) %>%
+  summarise(sd = sd(pr.change),
+            m = mean(pr.change))%>%
+  print()
+
+
+   mutate(week5 = paste0(signif(m1, 3), "(", signif(sd1, 3), ")"),post = paste0(signif(m2, 3), "(", signif(sd2, 3), ")")) %>%
+  select(sets,week5, post) %>%
+  print()
+
+
+
+```
 
