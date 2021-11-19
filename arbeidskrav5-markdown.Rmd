@@ -18,6 +18,9 @@ library(exscidata)
 library(ggplot2)
 library(lmerTest); library(lme4)
 library(emmeans)
+library(knitr)
+library(kableExtra)
+library(flextable)
 data("dxadata"); data("strengthvolume")
 
 library(tidyverse)
@@ -41,6 +44,9 @@ dat%>%
   group_by(sets) %>%
  summarise(m = mean(LBM_change),
             sd = sd(LBM_change)) %>%
+  print()
+
+
   mutate(ms = paste0(signif(m, 3), "(", signif(sd, 3), ")")) %>%
   select(sets, ms) %>%
   print()
@@ -79,6 +85,8 @@ plot(m5)
 
 
 ```{r}
+library(flextable)
+library(purrr)
 
 str.dat <- strengthvolume %>%
   group_by(exercise) %>%
@@ -94,21 +102,42 @@ filter(!is.na(combined.load), time == factor(time, levels = c("pre", "post"))) %
          group = factor(sets, levels = c("single", "multiple"))) %>% 
  group_by(participant) %>%
   mutate(n = n()) %>%
-  filter(n == "4") %>% #bare de med målinger ved alle tester er tatt med.
+  filter(n == "4") %>% 
   pivot_wider(names_from = time,
-              values_from = combined.load) %>%
-  
-  
+              values_from = combined.load)
+ 
+
+#lagre deskriptiv statistikk 
+desc.str <- str.dat2 %>%
    mutate(pr.change = (post - pre)/pre * 100)  %>%
   group_by(sets) %>%
   summarise(sd = sd(pr.change),
-            m = mean(pr.change))%>%
-  print()
+            m = mean(pr.change)) %>%
 
 
-   mutate(week5 = paste0(signif(m1, 3), "(", signif(sd1, 3), ")"),post = paste0(signif(m2, 3), "(", signif(sd2, 3), ")")) %>%
-  select(sets,week5, post) %>%
-  print()
+#regresjonsmodeller
+str.m1 <- lme4::lmer(post ~ pre + sex + sets +(1|participant), data = str.dat2)
+str.m2 <- lmerTest::lmer(post ~ pre + sex + sets +(1|participant), data = dat)
+str.m3 <- lm(post ~ pre + sex + sets, data = dat)
+
+summary(str.m1)
+
+
+tabellstyrke <- str.dat %>%
+mutate(sets = factor(sets, levels = c("multiple", "single"), 
+                        labels = c("3 sett", "1 sett"))) %>%
+  select(sets, pre, post) %>%
+  arrange(sets) %>%
+   flextable()  %>%
+  set_header_labels(sets = "pre",
+                    post = "post") %>%
+  
+   # Add footnote
+    add_footer_row(values = "Verdiene er gitt som gjennsomsnitt og standardavvik (SD)", colwidths = 3) %>%
+    # Make the columns widths match the content
+    autofit()
+
+
 
 
 
