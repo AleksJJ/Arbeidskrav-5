@@ -1,0 +1,115 @@
+---
+title: "Untitled"
+author: "Aleksander Josdal"
+date: "17 11 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#### Introduksjon
+
+```{r}
+library(exscidata)
+library(ggplot2)
+data("dxadata"); data("strengthvolume")
+
+library(tidyverse)
+
+dat <- dxadata %>%
+  select(participant:include, lean.left_leg, lean.right_leg) %>%
+  pivot_longer(names_to = "leg", 
+               values_to = "lean.mass", 
+               cols = lean.left_leg:lean.right_leg) %>%
+  mutate(leg = if_else(leg == "lean.left_leg", "L", "R"), 
+         sets = if_else(multiple == leg, "multiple", "single")) %>%
+  select(participant, time, sex, include, sets, leg, lean.mass) %>%
+  pivot_wider(names_from = time, 
+              values_from = lean.mass) %>%
+  mutate(LBM_change = post - pre)%>%
+  group_by(sets)
+  
+
+dat2 <- dat %>%
+  pivot_wider(names_from = sets,
+              values_from = LBM_change) %>%
+ 
+
+
+  
+  
+ 
+  
+#slå sammen pre og post til time igjen, og splitte sets til multiple og single???
+  
+
+m1 <- lm(LBM_change ~ sets + pre, data = dat) 
+
+m2 <- aov(LBM_change ~ pre + sets, data = dat)
+
+#splitte sets til 2 variabler. Multiple og single viser LBM change
+
+
+summary(m2)
+
+
+
+
+```
+
+```{r}
+library(lmerTest); library(lme4)
+
+  
+m3 <- lm(post ~ pre + sex + sets, data = dat) 
+m4 <- lmerTest::lmer(LBM_change ~ pre + sex + sets +(1|participant), data = dat)
+
+
+m5 <- lme4::lmer(post ~ pre + sex + sets +(1|participant), data = dat)
+
+plot(m5)
+
+summary(m3)
+
+ 
+  
+  
+  #lmer4 var tingen for å finne p verdi. confidence interval er good for hypotesetesting 
+
+```
+
+kladd!!!
+
+
+  #prøver å lage et plot her..
+  ggplot(aes(pre, LBM_change)) + geom_point(size = 3, fill = "lightblue", shape = 21) +
+         labs(x = "baseline", 
+              y = expression("LBM_change)) + 
+              theme minimal()
+              
+              
+              
+               ggplot(dat2, aes(x=post,y=pre)) + 
+  geom_point(size=2) + 
+  xlab("1 sett") + 
+  ylab("3 sett") +
+  theme_bw()
+  
+  
+  
+  ggplot(aes(pre, LBM_change)) + geom_point(size = 3, fill = "lightblue", shape = 21) +
+         labs(x = "baseline", 
+              y = expression("LBM_change")) + 
+              print()
+              
+              
+              
+lm(pre ~ single + multiple, data = dat2) %>%
+  
+  
+plot(LBM_change ~ single, data=dat2, ylab="baseline", xlab="1 sett")
+print()
+
+plot(LBM_change ~ multiple, data=dat2, ylab="baseline", xlab="1 sett")
+print()
+
