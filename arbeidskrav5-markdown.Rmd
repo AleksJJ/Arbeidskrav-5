@@ -23,8 +23,6 @@ Treningsmotstanden en variabel som kan øke CSA og 1RM, men hvor høyt volum som
 
 41 deltakere bestående av kvinner og menn i alderen 18-40 år. 7 av disse fullførte ikke. Eksklusjonskriterier; røyking, eller trent mer enn 1 økt i uken de siste 12 månedene.
 
-
-
 ##### Studiedesign
 
 Randomisert kontrollert studie hvor deltakerne ble tilfeldig fordelt hvilket bein som skulle gjennomføre 3 sett, og hvilket som bare skulle ta 1 sett. Alle skulle igjennom begge protokollene. De 2 første ukene var motstanden på 10RM, deretter 3 uker på 8RM og 7 uker med 7RM. Beinøvelsene som ble gjennomført var unilateral beinpress, kne-fleksjon og kne-ekstensjon, i gitt rekkefølge. Single sett ble gjennomført mellom 2 og 3 multisett. Etter beinøvelsene gjennomførte de 2 sett med bilateral benkpress, nedtrekk og enten skulderpress eller sittende roing. De fikk 90-180 sekunder pause. Det ble gjennomført 3 økter i uken.
@@ -39,7 +37,7 @@ Deskriptiv statistikk blir presentert som prosentvis endring i gjennomsnitt og s
 
 #### Resultater
 
-Etter 12 uker trening økte muskelmassen til single sett 2.04 ± 3.7%, og multiple økte med 3.3 ± 4.38% (p\<0.001). I muskelstyrke økte single sett 24.5 ± 12.9%, multiple økte med 31 ± 14.2% (p\<0.001).
+Etter 12 uker trening økte muskelmassen til single sett 2.04 ± 3.7%, og multiple økte med 3.3 ± 4.38% (p\<0.001 for differansen mellom gruppene). I muskelstyrke økte single sett 24.5 ± 12.9%, multiple økte med 31 ± 14.2% (p\<0.001 for differansen mellom gruppene).
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
 
@@ -228,10 +226,8 @@ print()
 
 Det viste seg at 3 sett ga signifikant økning i både muskelmasse og maksimal styrke. Etter å ta testet med forskjellige linneære modeller så var det ANCOVA som passet best til å analysere forskjellen mellom gruppene og ga signifikante P verdier. Scatterplottene viste også tegn til homoskedastisitet, og residualene var innenfor coocks distance og lå på linjen på QQ-plottet.
 
-Hass et al gjorde en lignende stude. Der fant de ikke signifikant forskjell mellom gruppene, men
-konkluderte med at 1 sett ga god respons uavhengig av treningsstatus @hass2000. \
-Kelly et al fant signifikant forskjell hos multiple gruppen i peak torque hos
-quadriceps, og konkluderte med at 3 sett vil kunne gi bedre styrkeøkning enn 1
-sett @Kelly2007.
+Hass et al gjorde en lignende stude. Der fant de ikke signifikant forskjell mellom gruppene, men konkluderte med at 1 sett ga god respons uavhengig av treningsstatus @hass2000. Kelly et al fant signifikant forskjell hos multiple gruppen i peak torque hos quadriceps, og konkluderte med at 3 sett vil kunne gi bedre styrkeøkning enn 1 sett @Kelly2007. En annen studie har også konkludert med at 3 sett vil gi større maksimal styrkeøkning enn 1 sett @humburg2007. Totalt sett ser det ut til at majoriteten av studier går i favør mot å trene med 3 sett når det kommer til muskelstyrke. Når det kommer til hypertrofi konkluderte Krieger et al i metaanalysen sin at flere sett vil være mer gunstig enn ett sett @krieger2010.
 
-asdasdas
+Tross signifikante forskjeller mellom gruppene i dette forsøket så ga også 1 sett signifikant økning i både muskelmasse og muskelstyrke. Hvis man er ute etter å få en effekt av minst mulig arbeid så er dette mulig, men det er også mulig å oppnå større effekt ved å trene med flere sett.
+
+#### Referanser
